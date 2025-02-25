@@ -2,6 +2,8 @@ const express = require('express');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+console.log(`🚀 Intentando iniciar el servidor en el puerto: ${PORT}`);
+
 
 app.get('/', (req, res) => {
     res.send('Hola desde el server prueba rama ');

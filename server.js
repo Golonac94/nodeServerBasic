@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
-const PORT = 4000;
+const PORT = process.env.PORT || 3000;
+
 
 app.get('/', (req, res) => {
     res.send('Hola desde el server prueba rama ');

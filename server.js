@@ -1,16 +1,17 @@
-const express = require('express');
+import express from 'express';  
+import dotenv from 'dotenv';
+import loginRouter from './routes/login.js';   
+
+dotenv.config();
+
 const app = express();
+app.disable('x-powered-by');
+app.use(express.json());  
+app.use('/login', loginRouter);
+
 const PORT = process.env.PORT || 3000;
-
-console.log(`🚀 Intentando iniciar el servidor en el puerto: ${PORT}`);
-
-
-app.get('/', (req, res) => {
-    res.send('Hola desde el server prueba rama ');
-});
-
-app.listen(PORT, '0.0.0.0', () => {
-    console.log(`Servidor corriendo en http://0.0.0.0:${PORT}`);
+app.listen(PORT, () => {
+    console.log(`Servidor corriendo en http://localhost:${PORT}`);
 });
 
 //comentario de prueba

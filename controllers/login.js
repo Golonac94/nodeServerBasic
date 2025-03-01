@@ -91,13 +91,13 @@ export const register = async (req, res) => {
 
         const { username, email, password, provider, role_id } = validationResult.data;
         const result = await registerUser(username, email, password, provider, role_id);
-        const accessToken = generateAccessToken(result.user);
-        const refreshToken = generateRefreshToken(result.user);
-
         if (!result.success) {
             return res.status(400).json({ message: result.message }); 
         }
 
+        const accessToken = generateAccessToken(result.user);
+        const refreshToken = generateRefreshToken(result.user);
+        
         res.status(201).json({ message: 'Registro exitoso', user: result.user, accessToken ,refreshToken  }); 
 
     } catch (error) {

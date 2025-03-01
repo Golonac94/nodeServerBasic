@@ -1,5 +1,5 @@
 import pool from './db.js';
-import bcrypt from 'bcrypt';
+import {hashPassword,comparePassword} from '../utils/hash.js';
 
 export async function findUserByEmail(email) {
     try {
@@ -18,7 +18,7 @@ export async function loginUser(email, password) {   //para registro normal
         const user = await findUserByEmail(email);
         if (!user) return { success: false, message: 'Usuario no encontrado' };
 
-        const passwordMatch = await bcrypt.compare(password, user.password);
+        const passwordMatch = await comparePassword(password, user.password);
         if (!passwordMatch) return { success: false, message: 'Contraseña incorrecta' };
 
         return { success: true, user };
@@ -32,7 +32,7 @@ export async function loginUser(email, password) {   //para registro normal
 
 export async function registerUser(username, email, password, provider, role_id) { //para registro normal
     try {
-        const hashedPassword = await bcrypt.hash(password, 10);
+        const hashedPassword = await hashPassword(password);
         const sql = `INSERT INTO users (id, username, email, password, provider, role_id) VALUES (UUID_TO_BIN(UUID()), ?, ?, ?, ?, ?)`;
         await pool.query(sql, [username, email, hashedPassword, provider, role_id]);
         const user = await findUserByEmail(email);  

@@ -1,6 +1,7 @@
 import { OAuth2Client } from 'google-auth-library';
 import { validateUser } from '../schemas/user.js'
 import { findUserByEmail, registerGoogleUser, loginUser, registerUser, deleteUser } from '../models/login.js';
+import { generateAccessToken,generateRefreshToken } from '../utils/jwt.js';
 
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
@@ -69,7 +70,11 @@ export const login = async (req, res) => {
         if (!result.success) {
             return res.status(401).json({ message: result.message }); 
         }
-        res.status(200).json({ message: 'Login exitoso', user: result.user });
+        const accessToken = generateAccessToken(result.user);
+        const refreshToken = generateRefreshToken(result.user);
+        
+        res.status(200).json({ message: 'Login exitoso', user: result.user, 
+             accessToken ,refreshToken  });
 
 
     } catch (error) {
@@ -86,17 +91,22 @@ export const register = async (req, res) => {
 
         const { username, email, password, provider, role_id } = validationResult.data;
         const result = await registerUser(username, email, password, provider, role_id);
+        const accessToken = generateAccessToken(result.user);
+        const refreshToken = generateRefreshToken(result.user);
 
         if (!result.success) {
             return res.status(400).json({ message: result.message }); 
         }
 
-        res.status(201).json({ message: 'Registro exitoso', user: result.user }); 
+        res.status(201).json({ message: 'Registro exitoso', user: result.user, accessToken ,refreshToken  }); 
 
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
 };
+
+
+
 
 export const removeUser = async (req, res) => {
     try {

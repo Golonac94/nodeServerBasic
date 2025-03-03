@@ -89,8 +89,8 @@ export const register = async (req, res) => {
             return res.status(400).json({ errors: validationResult.error.format() });
         }
 
-        const { username, email, password, provider, role_id } = validationResult.data;
-        const result = await registerUser(username, email, password, provider, role_id);
+        const { username, email, password, provider,phone, role_id } = validationResult.data;
+        const result = await registerUser(username, email, password, provider,phone, role_id);
         if (!result.success) {
             return res.status(400).json({ message: result.message }); 
         }

@@ -30,11 +30,11 @@ export async function loginUser(email, password) {   //para registro normal
 
 //registros
 
-export async function registerUser(username, email, password, provider, role_id) { //para registro normal
+export async function registerUser(username, email, password, provider,phone, role_id) { //para registro normal
     try {
         const hashedPassword = await hashPassword(password);
-        const sql = `INSERT INTO users (id, username, email, password, provider, role_id) VALUES (UUID_TO_BIN(UUID()), ?, ?, ?, ?, ?)`;
-        await pool.query(sql, [username, email, hashedPassword, provider, role_id]);
+        const sql = `INSERT INTO users (id, username, email, password, provider, phone, role_id) VALUES (UUID_TO_BIN(UUID()), ?, ?, ?, ? , ?, ?)`;
+        await pool.query(sql, [username, email, hashedPassword, provider, phone, role_id]);
         const user = await findUserByEmail(email);  
         return { success: true, user };
     } catch (error) {

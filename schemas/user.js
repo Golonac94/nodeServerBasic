@@ -15,6 +15,9 @@ const registerSchema = z.object({
         invalid_type_error: 'El proveedor de autenticación debe ser uno de: native, google, facebook o apple',
     }).default('native'),
 
+    phone: z.string()
+        .min(9, { message: 'Aun no se como verificar telefono' }),
+
     role_id: z.number()
         .int({ message: 'El ID del rol debe ser un número entero' })
         .positive({ message: 'El ID del rol debe ser un número positivo' })

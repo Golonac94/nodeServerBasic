@@ -57,6 +57,18 @@ export async function registerGoogleUser(username, email) { //para registro goog
 }
 
 
+export async function registerAppleUser(username, email) { //para registro google
+    try {
+        const sql = `INSERT INTO users (id, username, email, password, provider, role_id) 
+                     VALUES (UUID_TO_BIN(UUID()), ?, ?, NULL, 'apple', 1)`;
+        const [result] = await pool.query(sql, [username, email]);
+        return result;
+    } catch (error) {
+        throw new Error(error.message);
+    }
+}
+
+
 //borrado
 
 export async function deleteUser(email) {

@@ -1,7 +1,7 @@
 import express from 'express';
 import { 
     googleAuth, 
-    googleRegister, 
+    appleAuth, 
     login, 
     register, 
     removeUser 
@@ -13,7 +13,8 @@ import { refreshAccessToken } from '../controllers/refreshToken.js';
 const loginRouter = express.Router();
 
 loginRouter.post('/google/login', googleAuth);   //ME FALTA TESTEAR
-loginRouter.post('/google/register', googleRegister); //ME FALTA TESTEAR
+loginRouter.post('/apple/login', appleAuth);   //ME FALTA TESTEAR
+
 loginRouter.post('/login', login); //LOGIN
 loginRouter.post('/register', register); //REGISTRO
 // ME FALTA EL CERRAR SESION 

@@ -1,6 +1,6 @@
 import { OAuth2Client } from 'google-auth-library';
 import { validateUser } from '../schemas/user.js'
-import { findUserByEmail, registerGoogleUser, loginUser, registerUser, deleteUser } from '../models/login.js';
+import { findUserByEmail, registerGoogleUser,registerAppleUser, loginUser, registerUser, deleteUser } from '../models/login.js';
 import { generateAccessToken,generateRefreshToken } from '../utils/jwt.js';
 
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
@@ -18,11 +18,15 @@ export const googleAuth = async (req, res) => {
 
         const payload = ticket.getPayload();
         const email = payload.email;
-
+        const username = payload.name;
+        
         let user = await findUserByEmail(email);
 
         if (!user) {
-            return res.status(404).json({ message: 'Usuario no encontrado, por favor regístrate' });
+
+            await registerGoogleUser(username, email)
+            ;
+            res.status(201).json({ message: 'Usuario registrado exitosamente con Google' });
         }
 
         res.status(200).json({ message: 'Inicio de sesión exitoso', user });

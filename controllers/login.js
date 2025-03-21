@@ -40,43 +40,18 @@ export const appleAuth = async (req, res) => {
 
 }
 
-export const googleRegister = async (req, res) => {
-    try {
-        const { token } = req.body;
-        if (!token) return res.status(400).json({ message: 'Token de Google requerido' });
-
-        // Verificar el token con Google
-        const ticket = await client.verifyIdToken({
-            idToken: token,
-            audience: process.env.GOOGLE_CLIENT_ID,
-        });
-
-        const payload = ticket.getPayload();
-        const email = payload.email;
-        const username = payload.name;
-
-        let user = await findUserByEmail(email);
-
-        if (user) {
-            return res.status(409).json({ message: 'El usuario ya está registrado, inicia sesión' });
-        }
-
-        await registerGoogleUser(username, email);
-        res.status(201).json({ message: 'Usuario registrado exitosamente con Google' });
-
-    } catch (error) {
-        res.status(500).json({ error: error.message });
-    }
-};
 
 export const login = async (req, res) => {
     try {
         const { email, password } = req.body;
        
         const result = await loginUser(email, password);
-
+        
         if (!result.success) {
             return res.status(401).json({ message: result.message }); 
+        }
+        if (!result.user.provider != "native") {
+        res.status(401).json({ message: 'Usuario registrado por ' + user.provider});
         }
         const accessToken = generateAccessToken(result.user);
         const refreshToken = generateRefreshToken(result.user);

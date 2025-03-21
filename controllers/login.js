@@ -3,7 +3,13 @@ import { validateUser } from '../schemas/user.js'
 import { findUserByEmail, registerGoogleUser,registerAppleUser, loginUser, registerUser, deleteUser } from '../models/login.js';
 import { generateAccessToken,generateRefreshToken } from '../utils/jwt.js';
 
-const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+const client = new OAuth2Client();
+
+const validClientIds = [
+    process.env.GOOGLE_CLIENT_ID,  //el web
+    process.env.GOOGLE_CLIENT_ID_ANDROID,
+    process.env.GOOGLE_CLIENT_ID_IOS
+];
 
 export const googleAuth = async (req, res) => {
     try {
@@ -13,7 +19,7 @@ export const googleAuth = async (req, res) => {
         // Verificar el token con Google
         const ticket = await client.verifyIdToken({
             idToken: token,
-            audience: process.env.GOOGLE_CLIENT_ID,
+            audience: validClientIds,
         });
 
         const payload = ticket.getPayload();
@@ -25,8 +31,10 @@ export const googleAuth = async (req, res) => {
         if (!user) {
 
             await registerGoogleUser(username, email)
+            user = await findUserByEmail(email);
+
             ;
-            res.status(201).json({ message: 'Usuario registrado exitosamente con Google' });
+            res.status(201).json({ message: 'Usuario registrado exitosamente con Google' , user });
         }
 
         res.status(200).json({ message: 'Inicio de sesión exitoso', user });

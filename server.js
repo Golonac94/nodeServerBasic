@@ -2,10 +2,12 @@ import express from 'express';
 import dotenv from 'dotenv';
 import loginRouter from './routes/login.js';   
 import profileRouter from './routes/profile.js';  
+import { corsMiddleware } from './middlewares/cors.js'
 
 dotenv.config();
 
 const app = express();
+app.use(corsMiddleware()) 
 app.disable('x-powered-by');
 app.use(express.json());  
 

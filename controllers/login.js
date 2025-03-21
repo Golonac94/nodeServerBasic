@@ -33,8 +33,8 @@ export const googleAuth = async (req, res) => {
             await registerGoogleUser(username, email)
             user = await findUserByEmail(email);
 
-            const accessToken = generateAccessToken(result.user);
-            const refreshToken = generateRefreshToken(result.user);
+            const accessToken = generateAccessToken(user);
+            const refreshToken = generateRefreshToken(user);
 
             ;
             res.status(201).json({ message: 'Usuario registrado exitosamente con Google' , user,
@@ -42,8 +42,8 @@ export const googleAuth = async (req, res) => {
              });
         }
 
-        const accessToken = generateAccessToken(result.user);
-        const refreshToken = generateRefreshToken(result.user);
+        const accessToken = generateAccessToken(user);
+        const refreshToken = generateRefreshToken(user);
         res.status(200).json({ message: 'Inicio de sesión exitoso', user,
             accessToken ,refreshToken
          });

@@ -19,7 +19,7 @@ export const googleAuth = async (req, res) => {
         const payload = ticket.getPayload();
         const email = payload.email;
         const username = payload.name;
-        
+
         let user = await findUserByEmail(email);
 
         if (!user) {
@@ -35,6 +35,10 @@ export const googleAuth = async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 };
+
+export const appleAuth = async (req, res) => { 
+
+}
 
 export const googleRegister = async (req, res) => {
     try {

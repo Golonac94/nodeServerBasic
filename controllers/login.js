@@ -50,7 +50,7 @@ export const login = async (req, res) => {
         if (!result.success) {
             return res.status(401).json({ message: result.message }); 
         }
-        if (!result.user.provider != "native") {
+        if (result.user.provider != "native") {
         res.status(401).json({ message: 'Usuario registrado por ' + user.provider});
         }
         const accessToken = generateAccessToken(result.user);

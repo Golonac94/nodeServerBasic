@@ -33,11 +33,20 @@ export const googleAuth = async (req, res) => {
             await registerGoogleUser(username, email)
             user = await findUserByEmail(email);
 
+            const accessToken = generateAccessToken(result.user);
+            const refreshToken = generateRefreshToken(result.user);
+
             ;
-            res.status(201).json({ message: 'Usuario registrado exitosamente con Google' , user });
+            res.status(201).json({ message: 'Usuario registrado exitosamente con Google' , user,
+                accessToken ,refreshToken
+             });
         }
 
-        res.status(200).json({ message: 'Inicio de sesión exitoso', user });
+        const accessToken = generateAccessToken(result.user);
+        const refreshToken = generateRefreshToken(result.user);
+        res.status(200).json({ message: 'Inicio de sesión exitoso', user,
+            accessToken ,refreshToken
+         });
 
     } catch (error) {
         res.status(500).json({ error: error.message });

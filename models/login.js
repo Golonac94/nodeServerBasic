@@ -18,6 +18,10 @@ export async function loginUser(email, password) {   //para registro normal
         const user = await findUserByEmail(email);
         if (!user) return { success: false, message: 'Usuario no encontrado' };
 
+        if (user.provider != "native") {
+            res.status(401).json({ message: 'Usuario registrado por ' + user.provider});
+            }
+
         const passwordMatch = await comparePassword(password, user.password);
         if (!passwordMatch) return { success: false, message: 'Contraseña incorrecta' };
 
